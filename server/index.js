@@ -1,4 +1,5 @@
 require('dotenv').config({path: `${__dirname}/.env`});
+const path = require('path');
 const express = require ('express');
 require('./auth/passport.auth');
 
@@ -34,11 +35,15 @@ decorate(app);
 addRoutes(app);
 
 
+//serves up our build folder
+app.use(express.static(__dirname + '/../build'))
 
+//sends index.html file from the build folder
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../build/index.html'));
+});
 
-
-
-
+//listening on assigned port
 app.listen(PORT, () => {
     console.log(`App is running on port ${PORT}`)
 })
